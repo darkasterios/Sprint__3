@@ -20,7 +20,8 @@ public class OrderClient extends ScooterClient {
                 .spec(getBaseSpec())
                 .when()
                 .get(ORDER_PATH)
-                .then();
+                .then()
+                .log().all();
     }
 
 }

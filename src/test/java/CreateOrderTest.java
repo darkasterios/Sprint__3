@@ -1,3 +1,4 @@
+import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 import jdk.jfr.Description;
@@ -22,6 +23,7 @@ public class CreateOrderTest {
     }
 
     @Parameterized.Parameters
+    @Step("Test data colors creating for checking order creating")
     public static Object[][] getData() {
         return new Object[][]{
                 {List.of("BLACK", "GREY"), notNullValue()},
@@ -34,6 +36,7 @@ public class CreateOrderTest {
     OrderClient orderClient;
 
     @Before
+    @Step("New order client creating for test")
     public void setUp() {
         orderClient = new OrderClient();
     }
@@ -41,6 +44,7 @@ public class CreateOrderTest {
     @Test
     @DisplayName("Позитивный сценарий создания заказа.")
     @Description("Проверяем создание заказа в различными комбинациями color.")
+    @Step("Checking order creating with different colors")
     public void createOrderTest() {
         Order order = new Order(color);
         Response response = orderClient.createOrder(order);

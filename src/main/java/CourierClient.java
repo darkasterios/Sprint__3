@@ -1,18 +1,19 @@
+import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
+
 import static io.restassured.RestAssured.given;
 
 public class CourierClient extends ScooterClient {
 
     private final static String COURIER_PATH = "api/v1/courier/";
 
-    public boolean create(Courier courier) {
+    public ValidatableResponse create(Courier courier) {
         return given()
                 .spec(getBaseSpec())
                 .body(courier)
                 .when()
                 .post(COURIER_PATH)
-                .then()
-                .extract()
-                .path("ok");
+                .then();
     }
 
     public int loginAndGetId(CourierCredentials courierCredentials) {
@@ -38,112 +39,39 @@ public class CourierClient extends ScooterClient {
                 .path("ok");
     }
 
-    public int createExistingCourier(Courier courier) {
-        return given()
-                .spec(getBaseSpec())
-                .body(courier)
-                .when()
-                .post(COURIER_PATH)
-                .then()
-                .extract()
-                .statusCode();
-
-    }
-
-    public boolean createCourierWithObligatoryFields(CourierCredentials courierCredentials) {
+    public ValidatableResponse create(CourierCredentials courierCredentials) {
         return given()
                 .spec(getBaseSpec())
                 .body(courierCredentials)
                 .when()
                 .post(COURIER_PATH)
-                .then()
-                .assertThat()
-                .statusCode(201)
-                .extract()
-                .path("ok");
+                .then();
     }
 
-    public boolean checkSuccessfulRequestBodyAfterCreating(Courier courier) {
-        return given()
-                .spec(getBaseSpec())
-                .body(courier)
-                .when()
-                .post(COURIER_PATH)
-                .then()
-                .extract()
-                .path("ok");
-    }
-
-    public int checkStatusCodeAfterCreating(Courier courier) {
-        return given()
-                .spec(getBaseSpec())
-                .body(courier)
-                .when()
-                .post(COURIER_PATH)
-                .then()
-                .extract()
-                .statusCode();
-    }
-
-
-    public String createWithoutPassword(CourierWithoutPassword courierWithoutPassword) {
+    public ValidatableResponse createWithoutPassword(CourierWithoutPassword courierWithoutPassword) {
         return given()
                 .spec(getBaseSpec())
                 .body(courierWithoutPassword)
                 .when()
                 .post(COURIER_PATH)
-                .then()
-                .extract()
-                .path("message");
+                .then();
     }
 
-    public String creatingIdenticalLoginsCouriers(Courier courier) {
-        return given()
-                .spec(getBaseSpec())
-                .body(courier)
-                .when()
-                .post(COURIER_PATH)
-                .then()
-                .extract()
-                .path("message");
-
-    }
-
-    public String loginWithWrongPassword(CourierCredentials courierCredentials) {
+    public ValidatableResponse login(CourierCredentials courierCredentials) {
         return given()
                 .spec(getBaseSpec())
                 .body(courierCredentials)
                 .when()
                 .post(COURIER_PATH + "login")
-                .then()
-                .assertThat()
-                .statusCode(404)
-                .extract()
-                .path("message");
+                .then();
     }
 
-    public String loginWithoutPasswordField(CourierWithoutPassword courierWithoutPassword) {
+    public ValidatableResponse loginWithoutPasswordField(CourierWithoutPassword courierWithoutPassword) {
         return given()
                 .spec(getBaseSpec())
                 .body(courierWithoutPassword)
                 .when()
                 .post(COURIER_PATH + "login")
-                .then()
-                .assertThat()
-                .extract()
-                .path("message");
+                .then();
     }
-
-    public int logInAnGetStatusCode(CourierCredentials courierCredentials){
-        return given()
-                .spec(getBaseSpec())
-                .body(courierCredentials)
-                .when()
-                .post(COURIER_PATH + "login")
-                .then()
-                .extract()
-                .statusCode();
-    }
-
-
 }
